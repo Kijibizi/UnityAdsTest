@@ -1,0 +1,16 @@
+{
+    "name": "MoPub.Mediation.UnityAds",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6289b8f00a284cc4c8d54b51aadc9f2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

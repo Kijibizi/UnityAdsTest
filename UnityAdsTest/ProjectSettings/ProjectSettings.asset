@@ -580,7 +580,10 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: mopub_manager
+    4: mopub_manager
+    7: mopub_manager
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
