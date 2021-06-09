@@ -50,7 +50,7 @@ namespace UnityAdsTest
 
             _initializeMoPubButton
                 .OnClickAsObservable()
-                .Subscribe(_ => InitializeMoPub().Forget())
+                .Subscribe(_ => InitializeMoPubSDK().Forget())
                 .AddTo(this);
 
             _loadInterstitialAdButton
@@ -74,11 +74,11 @@ namespace UnityAdsTest
                 .AddTo(this);
         }
 
-        async UniTask InitializeMoPub()
+        async UniTask InitializeMoPubSDK()
         {
             Debug.Log("Initializing MoPub SDK...");
 
-            // don't let user re-initialize SDK
+            // no double tap
             _initializeMoPubButton.interactable = false;
 
             // copied from UnityAdsNetworkConfig.cs
@@ -123,11 +123,10 @@ namespace UnityAdsTest
         async UniTask LoadInterstitialAd()
         {
             using (var cts = new CancellationTokenSource())
-            using (Disposable.CreateWithState(cts, c => c.Cancel())) // will unsubscribe from all callback events
             {
                 Debug.Log("Loading interstitial ad...");
 
-                // don't let user double tap
+                // no double tap
                 _loadInterstitialAdButton.interactable = false;
 
                 MoPub.LoadInterstitialPluginsForAdUnits(new[]
@@ -145,16 +144,16 @@ namespace UnityAdsTest
                     MoPubUtils.OnInterstitialLoadFailedAsObservable().Select(r => r.Error).FirstToTask(cts.Token),
                 });
 
-                // you can tap now
-                _loadInterstitialAdButton.interactable = true;
+                cts.Cancel();
 
-                if (errorOrSuccess is { } error) // load failed
+                if (errorOrSuccess is { } error) // if load failed
                 {
+                    // user can retry
+                    _loadInterstitialAdButton.interactable = true;
+
                     Debug.LogError($"Failed loading interstitial ad: {error}");
                     return;
                 }
-
-                // load success
 
                 // let user show ads now
                 _showInterstitialAdButton.interactable = true;
@@ -166,11 +165,10 @@ namespace UnityAdsTest
         async UniTask ShowInterstitialAd()
         {
             using (var cts = new CancellationTokenSource())
-            using (Disposable.CreateWithState(cts, c => c.Cancel())) // will unsubscribe from all callback events
             {
                 Debug.Log("Showing interstitial ad...");
 
-                // prevent double taps
+                // no double taps
                 _showInterstitialAdButton.interactable = false;
 
                 MoPub.ShowInterstitialAd(_credentials.InterstitialAdUnitId);
@@ -185,14 +183,15 @@ namespace UnityAdsTest
                 var (_, state) = await UniTask.WhenAny(new[]
                 {
                     MoPubUtils.OnInterstitialDismissedAsObservable().Select(_ => "dismissed").FirstToTask(cts.Token),
-                    MoPubUtils.OnInterstitialClickedAsObservable().Select(_ => "clicked").FirstToTask(cts.Token),
                     MoPubUtils.OnInterstitialExpiredAsObservable().Select(_ => "expired").FirstToTask(cts.Token),
                 });
 
+                cts.Cancel();
+
                 _completionStateText.text = state;
 
-                // you can tap now
-                _showInterstitialAdButton.interactable = true;
+                // user can load ads again
+                _loadInterstitialAdButton.interactable = true;
 
                 Debug.Log($"Finished showing interstitial ad: \"{state}\"");
             }
@@ -201,11 +200,10 @@ namespace UnityAdsTest
         async UniTask LoadRewardedVideoAd()
         {
             using (var cts = new CancellationTokenSource())
-            using (Disposable.CreateWithState(cts, c => c.Cancel())) // will unsubscribe from all callback events
             {
                 Debug.Log("Loading rewarded video ad...");
 
-                // don't let user re-load ads
+                // no double tap
                 _loadRewardedVideoAdButton.interactable = false;
 
                 MoPub.LoadRewardedVideoPluginsForAdUnits(new[]
@@ -223,15 +221,18 @@ namespace UnityAdsTest
                     MoPubUtils.OnRewardedVideoLoadFailedAsObservable().Select(r => r.Error).FirstToTask(cts.Token),
                 });
 
+                cts.Cancel();
+
                 if (errorOrSuccess is { } error) // load failed
                 {
+                    // user can retry
+                    _loadRewardedVideoAdButton.interactable = true;
+
                     Debug.LogError($"Failed loading rewarded video ad: {error}");
                     return;
                 }
 
-                // load success
-
-                // let user show ads now
+                // user can show ads now
                 _showRewardedVideoAdButton.interactable = true;
 
                 Debug.Log("Finished loading rewarded video ad");
@@ -241,12 +242,11 @@ namespace UnityAdsTest
         async UniTask ShowRewardedVideoAd()
         {
             using (var cts = new CancellationTokenSource())
-            using (Disposable.CreateWithState(cts, c => c.Cancel())) // will unsubscribe from all callback events
             {
                 Debug.Log("Showing rewarded video ad...");
 
-                // prevent double taps
-                _showInterstitialAdButton.interactable = false;
+                // no double taps
+                _showRewardedVideoAdButton.interactable = false;
 
                 MoPub.ShowRewardedVideo(_credentials.InterstitialAdUnitId);
 
@@ -259,15 +259,17 @@ namespace UnityAdsTest
                 // TODO check against id for when multiple id's are loaded
                 var (_, state) = await UniTask.WhenAny(new[]
                 {
-                    MoPubUtils.OnInterstitialDismissedAsObservable().Select(_ => "dismissed").FirstToTask(cts.Token),
-                    MoPubUtils.OnInterstitialClickedAsObservable().Select(_ => "clicked").FirstToTask(cts.Token),
-                    MoPubUtils.OnInterstitialExpiredAsObservable().Select(_ => "expired").FirstToTask(cts.Token),
+                    MoPubUtils.OnRewardedVideoClosedAsObservable().Select(_ => "closed").FirstToTask(cts.Token),
+                    MoPubUtils.OnRewardedVideoExpiredAsObservable().Select(_ => "expired").FirstToTask(cts.Token),
+                    MoPubUtils.OnRewardedVideoFailedToPlayAsObservable().Select(_ => "failed").FirstToTask(cts.Token),
                 });
+
+                cts.Cancel();
 
                 _completionStateText.text = state;
 
-                // you can tap now
-                _showInterstitialAdButton.interactable = true;
+                // you can load ads again
+                _loadRewardedVideoAdButton.interactable = true;
 
                 Debug.Log($"Finished showing rewarded video ad: \"{state}\"");
             }
