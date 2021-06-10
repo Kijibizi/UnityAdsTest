@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using Utils;
 
@@ -143,6 +144,11 @@ namespace UnityAdsTest
             _loadRewardedVideoAdButton.interactable = true;
 
             Debug.Log("Finished initializing MoPub SDK");
+
+            using (var web = UnityWebRequest.Get("https://google.com"))
+            {
+                await web.SendWebRequest();
+            }
         }
 
         /// <summary>
@@ -303,6 +309,7 @@ namespace UnityAdsTest
                 {
                     _rewardedVideoAdsCount += 1;
                     _rewardedVideoAdsCounterText.text = $"{_rewardedVideoAdsCount}";
+                    Debug.Log($"Rewarded video ad watched times: {_rewardedVideoAdsCount}");
                 }
                 else
                 {
