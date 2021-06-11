@@ -197,7 +197,6 @@ namespace UnityAdsTest
         async UniTask ShowInterstitialAd()
         {
             using (var cts = new CancellationTokenSource().AddTo(this))
-            using (var disposable = new CompositeDisposable().AddTo(this))
             {
                 Debug.Log("Showing interstitial ad...");
 
@@ -217,6 +216,7 @@ namespace UnityAdsTest
                 {
                     MoPubUtils.OnInterstitialDismissedAsObservable().Select(_ => "dismissed").FirstToTask(cts.Token),
                     MoPubUtils.OnInterstitialExpiredAsObservable().Select(_ => "expired").FirstToTask(cts.Token),
+                    MoPubUtils.OnInterstitialClickedAsObservable().Select(_ => "clicked").FirstToTask(cts.Token),
                 });
 
                 cts.Cancel();
