@@ -1,0 +1,21 @@
+{
+    "name": "UnityAdsTest",
+    "rootNamespace": "",
+    "references": [
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:463118c4154f7a9458e9984fbdd00d66",
+        "GUID:6289b8f00a284cc4c8d54b51aadc9f2f",
+        "GUID:ff6de30450f3748908ff580f6ec64d9a",
+        "GUID:e1f8bbf2028a2754fb87ac6519e8c4f3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

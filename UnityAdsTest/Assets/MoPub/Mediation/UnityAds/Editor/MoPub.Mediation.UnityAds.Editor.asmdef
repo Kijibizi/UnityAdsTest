@@ -1,0 +1,19 @@
+{
+    "name": "MoPub.Mediation.UnityAds.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6289b8f00a284cc4c8d54b51aadc9f2f",
+        "GUID:e1f8bbf2028a2754fb87ac6519e8c4f3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

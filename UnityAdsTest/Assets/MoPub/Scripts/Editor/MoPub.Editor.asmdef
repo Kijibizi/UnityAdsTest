@@ -1,0 +1,19 @@
+{
+    "name": "MoPub.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6289b8f00a284cc4c8d54b51aadc9f2f",
+        "GUID:7d294f4c62eac6347b5bfc2423df1f83"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
